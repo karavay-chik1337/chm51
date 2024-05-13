@@ -76,7 +76,7 @@ public class SimpleGUI extends JFrame {
 
     private void displayGraphs(JFreeChart[] graphs) {
         JFrame graphFrame = new JFrame(graphType);
-        graphFrame.setSize(1600, 1200);
+        graphFrame.setSize(1500, 800);
         graphFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         JScrollPane scrollPane = new JScrollPane();
@@ -115,15 +115,19 @@ public class SimpleGUI extends JFrame {
         xAxis.setRange(xValues[0] - 1, xValues[xValues.length-1] + 1);
         yAxis.setRange(function.y0 - 1, function.CorrectF(xValues[xValues.length-1]) + 1);
 
+        XYSeriesCollection bothFunc = new XYSeriesCollection();
+        bothFunc.addSeries(sourceFunction);
+        bothFunc.addSeries(rungeFunction);
+        bothFunc.addSeries(eulerFunction);
         // Создаем графики
         JFreeChart chartF = ChartFactory.createXYLineChart("f(x)", "X", "Y",
                 new XYSeriesCollection(sourceFunction), PlotOrientation.VERTICAL, true, true, false);
 
-        JFreeChart chartRunge = ChartFactory.createXYLineChart("runge", "X", "Y",
-                new XYSeriesCollection(rungeFunction), PlotOrientation.VERTICAL, true, true, false);
+        JFreeChart chartRunge = ChartFactory.createXYLineChart("Графики", "X", "Y",
+                bothFunc, PlotOrientation.VERTICAL, true, true, false);
 
         JFreeChart chartEuler = ChartFactory.createXYLineChart("euler", "X", "Y",
-                new XYSeriesCollection(eulerFunction), PlotOrientation.VERTICAL, true, true, false);
+                bothFunc, PlotOrientation.VERTICAL, true, true, false);
 
         XYLineAndShapeRenderer renderer1 = new XYLineAndShapeRenderer();
         renderer1.setSeriesLinesVisible(0, true);
@@ -155,10 +159,11 @@ public class SimpleGUI extends JFrame {
         chartEuler.getXYPlot().setRangeAxis(yAxis);
         chartEuler.getXYPlot().setRenderer(renderer3);
 
+
         return new JFreeChart[] {
-                chartF,
-                chartRunge,
-                chartEuler
+//                chartF,
+                chartRunge
+//                chartEuler
         };
     }
 }
