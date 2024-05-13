@@ -6,7 +6,7 @@ public class Function {
         //return Math.cos(2 * x + y) + 1.5 * (x - y);//для численного
     }
 
-    public double fTochnoe(double x) {//для тестового
+    public double CorrectF(double x) {//для тестового
         return 7 * Math.pow(Math.E, x - 0.6) / 5 - x / 8d - 0.125d;
     }
 }

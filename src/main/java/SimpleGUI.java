@@ -66,9 +66,8 @@ public class SimpleGUI extends JFrame {
                             Integer.parseInt(inputN.getText())
                     );
                     Function function = new Function();
-                    Euler euler = new Euler(function);
-                    Runge runge = new Runge(function);
-                    JFreeChart[] graphs = createGraphs(section, function, runge, euler);
+                    TypeMethod typeMethod = new TypeMethod(function);
+                    JFreeChart[] graphs = createGraphs(section, function, typeMethod);
                     displayGraphs(graphs);
                 }
         );
@@ -93,20 +92,20 @@ public class SimpleGUI extends JFrame {
         graphFrame.setVisible(true);
     }
 
-    private JFreeChart[] createGraphs(Section section,Function function, Runge runge, Euler euler) {
+    private JFreeChart[] createGraphs(Section section, Function function, TypeMethod typeMethod) {
 
         XYSeries sourceFunction = new XYSeries("f(x)");
         XYSeries rungeFunction = new XYSeries("runge");
         XYSeries eulerFunction = new XYSeries("euler");
         double[] xValues = section.uniformPart();
-        double[] yValueR = runge.runge(section.a, section.b, section.n);
-        double[] yValueE = euler.euler(section.a, section.b, section.n);
+        double[] yValueR = typeMethod.runge(section.a, section.b, section.n);
+        double[] yValueE = typeMethod.euler(section.a, section.b, section.n);
         for (int i = 0; i < section.n; i++) {
-            sourceFunction.add(xValues[i], function.fTochnoe(xValues[i]));
+            sourceFunction.add(xValues[i], function.CorrectF(xValues[i]));
             rungeFunction.add(xValues[i], yValueR[i]);
             eulerFunction.add(xValues[i], yValueE[i]);
         }
-//        System.out.println(function.fTochnoe(xValues[999]) + " " + yValueR[999] + " " + yValueE[999]);
+//        System.out.println(function.fTochnoe(xValues[9]) + " " + yValueR[9] + " " + yValueE[9]);
         NumberAxis xAxis = new NumberAxis("X");
         NumberAxis yAxis = new NumberAxis("Y");
 
@@ -114,7 +113,7 @@ public class SimpleGUI extends JFrame {
         yAxis.setAutoRange(false);
 
         xAxis.setRange(xValues[0] - 1, xValues[xValues.length-1] + 1);
-        yAxis.setRange(function.y0 - 1, function.fTochnoe(xValues[xValues.length-1]) + 1);
+        yAxis.setRange(function.y0 - 1, function.CorrectF(xValues[xValues.length-1]) + 1);
 
         // Создаем графики
         JFreeChart chartF = ChartFactory.createXYLineChart("f(x)", "X", "Y",
