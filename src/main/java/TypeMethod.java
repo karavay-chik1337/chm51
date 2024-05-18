@@ -1,6 +1,8 @@
+//доделать error
 public class TypeMethod {
     Function function;
-
+    double delta_pred, delta_new;
+    public static int MAX_ITER = 68000000;
     public TypeMethod(Function function) {
         this.function = function;
     }
@@ -32,17 +34,35 @@ public class TypeMethod {
 
     public int tes_epxT_runge(double a, double b, double eps) {
         double correctY = function.CorrectF(b);
+        delta_pred = 1;
         int i = 2;
-        while (Math.abs(runge(a, b, i)[i - 1] - correctY) > eps)
-            i += 1;
+        while (delta_pred > eps && i < MAX_ITER) {
+            delta_pred = Math.abs(runge(a, b, i)[i - 1] - correctY);
+            i *= 2;
+            delta_new = Math.abs(runge(a, b, i)[i - 1] - correctY);
+            if(delta_new >= delta_pred){
+                System.out.println("Error Runge = 1");
+                break;
+            }
+        }
+        //System.out.println("Error Runge = " + (delta_pred <=eps?0:(i>=MAX_ITER?2:1)) + '\n');
         return i;
     }
 
     public int tes_epxT_euler(double a, double b, double eps) {
         double correctY = function.CorrectF(b);
         int i = 2;
-        while (Math.abs(euler(a, b, i)[i - 1] - correctY) > eps)
-            i += 1;
+        delta_pred = 1;
+        while (delta_pred > eps && i < MAX_ITER){
+            delta_pred = Math.abs(euler(a, b, i)[i - 1] - correctY);
+            i *= 2;
+            delta_new = Math.abs(euler(a, b, i)[i - 1] - correctY);
+            if(delta_new >= delta_pred){
+                System.out.println("Error Euler = 1");
+                break;
+            }
+        }
+        //System.out.println("\nError Euler = " + (delta_pred <=eps?0:(i>=MAX_ITER?2:1)));
         return i;
     }
 
@@ -55,7 +75,7 @@ public class TypeMethod {
 
     public int tes_epxCH_euler(double a, double b, double eps) {
         int i = 2;
-        while ((Math.abs(euler(a, b, i)[i - 1] - euler(a, b, 2 * i)[2 * i - 1])) / 7d > eps)
+        while (Math.abs(euler(a, b, i)[i - 1] - euler(a, b, 2 * i)[2 * i - 1]) > eps)
             i += 1;
         return i;
     }
