@@ -2,7 +2,7 @@
 public class TypeMethod {
     Function function;
     double delta_pred, delta_new;
-    public static int MAX_ITER = 68000000;
+    public static int MAX_ITER = 35000000;
     public TypeMethod(Function function) {
         this.function = function;
     }
@@ -32,51 +32,89 @@ public class TypeMethod {
         return y;
     }
 
-    public int tes_epxT_runge(double a, double b, double eps) {
-        double correctY = function.CorrectF(b);
+    public int[] tes_epxT_runge(double a, double b, double eps) {
+        boolean flag = true;
         delta_pred = 1;
+        double correctY = function.CorrectF(b);
         int i = 2;
         while (delta_pred > eps && i < MAX_ITER) {
             delta_pred = Math.abs(runge(a, b, i)[i - 1] - correctY);
             i *= 2;
             delta_new = Math.abs(runge(a, b, i)[i - 1] - correctY);
             if(delta_new >= delta_pred){
-                System.out.println("Error Runge = 1");
+                flag = false;
                 break;
             }
         }
-        //System.out.println("Error Runge = " + (delta_pred <=eps?0:(i>=MAX_ITER?2:1)) + '\n');
-        return i;
+        if(!flag)
+            return new int[] {i, 1};
+        else if(i >= MAX_ITER - 1)
+            return new int[] {i, 2};
+        else
+            return new int[] {i, 0};
     }
 
-    public int tes_epxT_euler(double a, double b, double eps) {
+    public int[] tes_epxT_euler(double a, double b, double eps) {
+        boolean flag = true;
+        delta_pred = 1;
         double correctY = function.CorrectF(b);
         int i = 2;
-        delta_pred = 1;
         while (delta_pred > eps && i < MAX_ITER){
             delta_pred = Math.abs(euler(a, b, i)[i - 1] - correctY);
             i *= 2;
             delta_new = Math.abs(euler(a, b, i)[i - 1] - correctY);
             if(delta_new >= delta_pred){
-                System.out.println("Error Euler = 1");
+                flag = false;
                 break;
             }
         }
-        //System.out.println("\nError Euler = " + (delta_pred <=eps?0:(i>=MAX_ITER?2:1)));
-        return i;
+        if(!flag)
+            return new int[] {i, 1};
+        else if(i >= MAX_ITER)
+            return new int[] {i, 2};
+        else
+            return new int[] {i, 0};
     }
 
-    public int tes_epxCH_runge(double a, double b, double eps) {
+    public int[] tes_epxCH_runge(double a, double b, double eps) {
         int i = 2;
-        while ((Math.abs(runge(a, b, i)[i - 1] - runge(a, b, 2 * i)[2 * i - 1])) / 7d > eps)
-            i += 1;
-        return i;
+        delta_pred = 1;
+        boolean flag = true;
+        while (delta_pred > eps && i < MAX_ITER){
+            delta_pred = (Math.abs(runge(a, b, i)[i - 1] - runge(a, b, 2 * i)[2 * i - 1])) / 7d;
+            i *= 2;
+            delta_new = (Math.abs(runge(a, b, i)[i - 1] - runge(a, b, 2 * i)[2 * i - 1])) / 7d;
+            if(delta_new >= delta_pred){
+                flag = false;
+                break;
+            }
+        }
+        if(!flag)
+            return new int[] {i, 1};
+        else if(i >= MAX_ITER)
+            return new int[] {i, 2};
+        else
+            return new int[] {i, 0};
     }
 
-    public int tes_epxCH_euler(double a, double b, double eps) {
+    public int[] tes_epxCH_euler(double a, double b, double eps) {
         int i = 2;
-        while (Math.abs(euler(a, b, i)[i - 1] - euler(a, b, 2 * i)[2 * i - 1]) > eps)
-            i += 1;
-        return i;
+        boolean flag = true;
+        delta_pred = 1;
+        while (delta_pred > eps && i < MAX_ITER){
+            delta_pred = Math.abs(euler(a, b, i)[i - 1] - runge(a, b, 2 * i)[2 * i - 1]);
+            i *= 2;
+            delta_new = Math.abs(euler(a, b, i)[i - 1] - runge(a, b, 2 * i)[2 * i - 1]);
+            if(delta_new >= delta_pred){
+                flag = false;
+                break;
+            }
+        }
+        if(!flag)
+            return new int[] {i, 1};
+        else if(i >= MAX_ITER)
+            return new int[] {i, 2};
+        else
+            return new int[] {i, 0};
     }
 }

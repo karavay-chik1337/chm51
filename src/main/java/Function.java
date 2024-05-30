@@ -1,9 +1,9 @@
 public class Function {
-    double y0 = 1.2;
+    double y0 = 0;
 
     public double f(double x, double y) {
-        return x / 8d + y;
-        //return Math.cos(2 * x + y) + 1.5 * (x - y);//для численного
+        //return x / 8d + y;
+        return Math.cos(2d * x + y) + 1.5 * (x - y);//для численного
     }
 
     public double CorrectF(double x) {//для тестового

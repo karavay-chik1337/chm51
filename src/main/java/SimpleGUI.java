@@ -18,7 +18,7 @@ public class SimpleGUI extends JFrame {
 
     private static final JButton button = new JButton("Построить");
     private static final JTextField inputA = new JTextField("0.6", 10);
-    private static final JTextField inputB = new JTextField("10", 10);
+    private static final JTextField inputB = new JTextField("1", 10);
     private static final JTextField inputN = new JTextField("1000", 10);
     private static final JLabel labelA = new JLabel("Левый конец отрезка(a): ");
     private static final JLabel labelB = new JLabel("Правый конец отрезка(b): ");
@@ -33,15 +33,6 @@ public class SimpleGUI extends JFrame {
         this.setBounds(100, 100, 400, 250);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-//        buttonGroup1.add(inputSeparation1);
-//        buttonGroup1.add(inputSeparation2);
-//
-//        buttonGroup2.add(inputMethod1);
-//        buttonGroup2.add(inputMethod2);
-//
-//        inputSeparation1.doClick();
-//        inputMethod1.doClick();
-
         Container container = this.getContentPane();
         container.setLayout(new GridLayout(9, 1, 2, 2));
         container.add(labelA);
@@ -50,14 +41,8 @@ public class SimpleGUI extends JFrame {
         container.add(inputB);
         container.add(labelN);
         container.add(inputN);
-//        container.add(labelSeparation);
         container.add(text);
-//        container.add(inputSeparation1);
-//        container.add(inputSeparation2);
         container.add(text);
-//        container.add(labelMethod);
-//        container.add(inputMethod1);
-//        container.add(inputMethod2);
 
         button.addActionListener(e -> {
                     Section section = new Section(
@@ -94,18 +79,17 @@ public class SimpleGUI extends JFrame {
 
     private JFreeChart[] createGraphs(Section section, Function function, TypeMethod typeMethod) {
 
-        XYSeries sourceFunction = new XYSeries("f(x)");
+//        XYSeries sourceFunction = new XYSeries("f(x)");
         XYSeries rungeFunction = new XYSeries("runge");
         XYSeries eulerFunction = new XYSeries("euler");
         double[] xValues = section.uniformPart();
         double[] yValueR = typeMethod.runge(section.a, section.b, section.n);
         double[] yValueE = typeMethod.euler(section.a, section.b, section.n);
         for (int i = 0; i < section.n; i++) {
-            sourceFunction.add(xValues[i], function.CorrectF(xValues[i]));
+//            sourceFunction.add(xValues[i], function.CorrectF(xValues[i]));
             rungeFunction.add(xValues[i], yValueR[i]);
             eulerFunction.add(xValues[i], yValueE[i]);
         }
-//        System.out.println(function.fTochnoe(xValues[9]) + " " + yValueR[9] + " " + yValueE[9]);
         NumberAxis xAxis = new NumberAxis("X");
         NumberAxis yAxis = new NumberAxis("Y");
 
@@ -116,12 +100,12 @@ public class SimpleGUI extends JFrame {
         yAxis.setRange(function.y0 - 1, function.CorrectF(xValues[xValues.length-1]) + 1);
 
         XYSeriesCollection bothFunc = new XYSeriesCollection();
-        bothFunc.addSeries(sourceFunction);
+//        bothFunc.addSeries(sourceFunction);
         bothFunc.addSeries(rungeFunction);
         bothFunc.addSeries(eulerFunction);
         // Создаем графики
-        JFreeChart chartF = ChartFactory.createXYLineChart("f(x)", "X", "Y",
-                new XYSeriesCollection(sourceFunction), PlotOrientation.VERTICAL, true, true, false);
+//        JFreeChart chartF = ChartFactory.createXYLineChart("f(x)", "X", "Y",
+//                new XYSeriesCollection(sourceFunction), PlotOrientation.VERTICAL, true, true, false);
 
         JFreeChart chartRunge = ChartFactory.createXYLineChart("Графики", "X", "Y",
                 bothFunc, PlotOrientation.VERTICAL, true, true, false);
@@ -129,11 +113,11 @@ public class SimpleGUI extends JFrame {
         JFreeChart chartEuler = ChartFactory.createXYLineChart("euler", "X", "Y",
                 bothFunc, PlotOrientation.VERTICAL, true, true, false);
 
-        XYLineAndShapeRenderer renderer1 = new XYLineAndShapeRenderer();
-        renderer1.setSeriesLinesVisible(0, true);
-        renderer1.setSeriesShapesVisible(0, true);
-        renderer1.setSeriesShape(0, new Ellipse2D.Double(-3.0, -3.0, 6.0, 6.0));
-        renderer1.setSeriesPaint(0, Color.RED);
+//        XYLineAndShapeRenderer renderer1 = new XYLineAndShapeRenderer();
+//        renderer1.setSeriesLinesVisible(0, true);
+//        renderer1.setSeriesShapesVisible(0, true);
+//        renderer1.setSeriesShape(0, new Ellipse2D.Double(-3.0, -3.0, 6.0, 6.0));
+//        renderer1.setSeriesPaint(0, Color.RED);
 
         XYLineAndShapeRenderer renderer2 = new XYLineAndShapeRenderer();
         renderer2.setSeriesLinesVisible(0, true);
@@ -147,9 +131,9 @@ public class SimpleGUI extends JFrame {
         renderer3.setSeriesShape(0, new Ellipse2D.Double(-3.0, -3.0, 6.0, 6.0));
         renderer3.setSeriesPaint(0, Color.BLUE);
 
-        chartF.getXYPlot().setDomainAxis(xAxis);
-        chartF.getXYPlot().setRangeAxis(yAxis);
-        chartF.getXYPlot().setRenderer(renderer1);
+//        chartF.getXYPlot().setDomainAxis(xAxis);
+//        chartF.getXYPlot().setRangeAxis(yAxis);
+//        chartF.getXYPlot().setRenderer(renderer1);
 
         chartRunge.getXYPlot().setDomainAxis(xAxis);
         chartRunge.getXYPlot().setRangeAxis(yAxis);
